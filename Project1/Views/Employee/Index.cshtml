@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Project1.Models.Employee>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Сотрудники БД</title>
+</head>
+<body>
+    <h3>Список</h3>
+    <table>
+        <tr>
+            <td>Имя</td>
+            <td>Фамилия</td>
+            <td>Дата рождения</td>
+            <td>Возраст</td>
+            <td>Результат теста</td>
+        </tr>
+        @foreach (var emp in Model)
+        {
+            <tr>
+                <td>@emp.Name</td>
+                <td>@emp.Surname</td>
+                <td>@emp.BirthDay</td>
+                <td>@emp.Age</td>
+                <td>@emp.EnglishValue</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

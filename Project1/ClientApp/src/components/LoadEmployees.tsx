@@ -24,54 +24,42 @@ export const LoadEmployees = (props: EmployeeProps) => {
     return (
         <React.Fragment>
             <h1 id="tabelLabel">Employees</h1>
-            <RenderEmployeesTable {...empPage} />//////////тут
-            <RenderPagination { ...props } />////////////тут
+            <table className='table table-striped' aria-labelledby="tabelLabel">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>Birthday</th>
+                        <th>Age</th>
+                        <th>English test result</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {empPage.map((employee: EmployeeStore.Employee) =>
+                        <tr key={employee.id}>
+                            <td>{employee.name}</td>
+                            <td>{employee.surname}</td>
+                            <td>{employee.birthDay}</td>
+                            <td>{employee.age}</td>
+                            <td>{employee.englishValue}</td>
+                            <td>x</td>
+                        </tr>
+                    )}
+
+                </tbody>
+            </table>
+            <div className="d-flex justify-content-between">
+                {props.pageNumb != 0 ? <button className='btn btn-outline-secondary btn-sm' onClick={props.prevPage}>Previous</button> : <span />}
+                {props.isLoaded && <span>Loading...</span>}
+                {!props.isLoaded && <span>Current page: {props.pageNumb + 1} - Last page: {props.maxPage + 1}</span>}
+                {props.pageNumb != props.maxPage ? <button className='btn btn-outline-secondary btn-sm' onClick={props.nextPage}>Next</button> : <span />}
+            </div>
         </React.Fragment>
     );
 
 }
 
-const RenderEmployeesTable = (props: EmployeeStore.Employee[]) => {
-    return (
-        <table className='table table-striped' aria-labelledby="tabelLabel">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Birthday</th>
-                    <th>Age</th>
-                    <th>English test result</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {props.map((employee: EmployeeStore.Employee) =>
-                    <tr key={employee.id}>
-                        <td>{employee.name}</td>
-                        <td>{employee.surname}</td>
-                        <td>{employee.birthDay}</td>
-                        <td>{employee.age}</td>
-                        <td>{employee.englishValue}</td>
-                        <td>x</td>
-                    </tr>
-                )}
-
-            </tbody>
-        </table>
-    );
-}
-
-const RenderPagination = (props: EmployeeProps) => {
-
-    return (
-        <div className="d-flex justify-content-between">
-            {props.pageNumb != 0 ? <button className='btn btn-outline-secondary btn-sm' onClick={props.prevPage}>Previous</button> : <span />}
-            {props.isLoaded && <span>Loading...</span>}
-            {!props.isLoaded && <span>Current page: {props.pageNumb + 1} - Last page: {props.maxPage+1}</span>}
-            {props.pageNumb != props.maxPage ? <button className='btn btn-outline-secondary btn-sm' onClick={props.nextPage}>Next</button> : <span />}
-        </div>
-    );
-}
 
 export default connect(
     (state: ApplicationState) => state.employees, 

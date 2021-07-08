@@ -23,7 +23,7 @@ var EmployeeStore = require("../store/Employee");
 function LoadEmploye(props) {
     var _a = react_1.useState(props.employees), emp = _a[0], setEmp = _a[1];
     return (React.createElement(React.Fragment, null,
-        "props.requestEmployees();",
+        props.requestEmployees(),
         props.employees.map(function (employee) {
             return React.createElement("tr", { key: employee.id },
                 React.createElement("td", null, employee.name),

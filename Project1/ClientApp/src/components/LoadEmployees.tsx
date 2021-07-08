@@ -1,10 +1,10 @@
 ﻿import * as React from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { ApplicationState } from '../store';
 import * as EmployeeStore from '../store/Employee';
-import EmployeeSort from './Sort';
 
 // At runtime, Redux will merge together...
 type EmployeeProps =
@@ -12,6 +12,28 @@ type EmployeeProps =
     & typeof EmployeeStore.actionCreators // ... plus action creators we've requested
     & RouteComponentProps<{ startDateIndex: string }>; // ... plus incoming routing parameters
 
+export function LoadEmploye(props: EmployeeProps) {
+    const [emp, setEmp] = useState(props.employees);
+
+
+
+    return (
+        <React.Fragment>
+            
+            {props.employees.map((employee: EmployeeStore.Employee) =>
+                <tr key={employee.id}>
+                    <td>{employee.name}</td>
+                    <td>{employee.surname}</td>
+                    <td>{employee.birthDay}</td>
+                    <td>{employee.age}</td>
+                    <td>{employee.englishValue}</td>
+                    <td>x</td>
+                </tr>
+            )}
+        </React.Fragment>
+    );
+
+}
 
 class LoadEmployee extends React.PureComponent<EmployeeProps> {
     // This method is called when the component is first added to the document
@@ -21,7 +43,7 @@ class LoadEmployee extends React.PureComponent<EmployeeProps> {
 
     // This method is called when the route parameters change
     public componentDidUpdate() {
-        this.ensureDataFetched();
+        //this.ensureDataFetched(0);
     }
 
     public render() {
@@ -35,8 +57,7 @@ class LoadEmployee extends React.PureComponent<EmployeeProps> {
     }
 
     private ensureDataFetched() {
-        const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
-        this.props.requestEmployees(startDateIndex);
+        this.props.requestEmployees();
     }
 
     private renderEmployeesTable() {
@@ -44,7 +65,7 @@ class LoadEmployee extends React.PureComponent<EmployeeProps> {
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
-                        <th>Name<EmployeeSort /></th>
+                        <th>Name</th>
                         <th>Surname</th>
                         <th>Birthday</th>
                         <th>Age</th>
@@ -53,7 +74,7 @@ class LoadEmployee extends React.PureComponent<EmployeeProps> {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.employess.map((employee: EmployeeStore.Employee) =>
+                    {this.props.employees.map((employee: EmployeeStore.Employee) =>
                         <tr key={employee.id}>
                             <td>{employee.name}</td>
                             <td>{employee.surname}</td>
@@ -70,14 +91,12 @@ class LoadEmployee extends React.PureComponent<EmployeeProps> {
     }
 
     private renderPagination() {
-        const prevStartDateIndex = (this.props.startDateIndex || 0) - 5;
-        const nextStartDateIndex = (this.props.startDateIndex || 0) + 5;
 
         return (
             <div className="d-flex justify-content-between">
-                <Link className='btn btn-outline-secondary btn-sm' to={`/load-employees/${prevStartDateIndex}`}>Previous</Link>
+                {this.props.pageNumb != 0 ? <button className='btn btn-outline-secondary btn-sm' onClick={this.props.prevPage}>Previous</button> : ""}
                 {this.props.isLoading && <span>Loading...</span>}
-                <Link className='btn btn-outline-secondary btn-sm' to={`/load-employees/${nextStartDateIndex}`}>Next</Link>
+                {this.props.pageNumb != this.props.maxPage ? <button className='btn btn-outline-secondary btn-sm' onClick={this.props.nextPage}>Next</button> : ""}
             </div>
         );
     }
@@ -86,4 +105,4 @@ class LoadEmployee extends React.PureComponent<EmployeeProps> {
 export default connect(
     (state: ApplicationState) => state.employees, 
     EmployeeStore.actionCreators 
-)(LoadEmployee as any);
+)(LoadEmploye as any);

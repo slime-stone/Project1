@@ -9,6 +9,6 @@ import './custom.css'
 export default () => (
     <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/load-employees/:startDateIndex?' component={LoadEmployees} />
+        <Route path='/load-employees/' component={LoadEmployees} />
     </Layout>
 );

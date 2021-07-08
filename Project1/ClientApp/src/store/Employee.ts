@@ -4,10 +4,12 @@ import { AppThunkAction } from './';
 
 export interface EmployeesState {
     isLoading: boolean;
-    startDateIndex?: number;
-    isSorted?: boolean;
-    isToggleOn?: boolean;
-    employess: Employee[];
+    employees: Employee[];
+    pageNumb: number;
+    pageSize: number;
+    maxPage: number;
+    sortColumn?: string;
+    sortDirection: "asc" | "desc" | "none";
 }
 
 export interface Employee {
@@ -21,67 +23,76 @@ export interface Employee {
 
 interface RequestEmployeeAction {
     type: 'REQUEST_EMPLOYEE';
-    startDateIndex: number;
 }
 
 interface ReceiveEmployeeAction {
     type: 'RECEIVE_EMPLOYEE';
-    startDateIndex: number;
     employees: Employee[];
 }
 
 interface AscSortAction {
     type: "ASC_SORT";
-    startDateIndex: number;
     sortedValue: string;
-    employees: Employee[];
 }
 
 interface DescSortAction {
     type: "DESC_SORT";
-    startDateIndex: number;
     sortedValue: string;
-    employees: Employee[];
+}
+
+interface NextPageAction {
+    type: "NEXT_PAGE";
+}
+
+interface PrewPageAction {
+    type: "PREV_PAGE";
 }
 
 
 
-type KnownAction = RequestEmployeeAction | ReceiveEmployeeAction | AscSortAction | DescSortAction;
+type KnownAction = RequestEmployeeAction | ReceiveEmployeeAction | AscSortAction | DescSortAction | NextPageAction | PrewPageAction;
 
 
 
 export const actionCreators = {
-    requestEmployees: (startDateIndex: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestEmployees: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
-        if (appState && appState.employees && startDateIndex !== appState.employees.startDateIndex) {
+        if (appState && appState.employees) {
             fetch(`employee`)
                 .then(response => response.json() as Promise<Employee[]>)
                 .then(data => {
-                    dispatch({ type: 'RECEIVE_EMPLOYEE', startDateIndex: startDateIndex, employees: data });
+                    dispatch({ type: 'RECEIVE_EMPLOYEE', employees: data });
                 });
-
-            dispatch({ type: 'REQUEST_EMPLOYEE', startDateIndex: startDateIndex });
+            dispatch({ type: 'REQUEST_EMPLOYEE'});
         }
     },
-    ascSort: (sortedValue: string, startDataIndex: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    ascSort: (sortedValue: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
-        if (appState && appState.employees && sortedValue in appState.employees.employess) {
-            dispatch({ type: "ASC_SORT", startDateIndex: startDataIndex, sortedValue: sortedValue, employees: appState.employees.employess });
+        if (appState && appState.employees && sortedValue in appState.employees.employees) {
+            dispatch({ type: "ASC_SORT", sortedValue: sortedValue});
         }
     },
-    descSort: (sortedValue: string, startDataIndex: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    descSort: (sortedValue: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
-        if (appState && appState.employees && sortedValue in appState.employees.employess) {
-            dispatch({ type: "DESC_SORT", startDateIndex: startDataIndex, sortedValue: sortedValue, employees: appState.employees.employess });
+        if (appState && appState.employees && sortedValue in appState.employees.employees) {
+            dispatch({ type: "DESC_SORT", sortedValue: sortedValue});
+        }
+    },
+    nextPage: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const appState = getState();
+        if (appState && appState.employees) {
+            dispatch({ type: "NEXT_PAGE"});
+        }
+    },
+    prevPage: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const appState = getState();
+        if (appState && appState.employees) {
+            dispatch({ type: "PREV_PAGE" });
         }
     }
 };
 
-const unloadedState: EmployeesState = { employess: [], isLoading: false };
-
-function byField(field) {
-    return (a, b) => a[field] > b[field] ? 1 : -1;
-}
+const unloadedState: EmployeesState = { employees: [], isLoading: false, pageNumb: 0, pageSize: 5, maxPage: 0, sortDirection: "none" };
 
 export const reducer: Reducer<EmployeesState> = (state: EmployeesState | undefined, incomingAction: Action): EmployeesState => {
     if (state === undefined) {
@@ -92,32 +103,40 @@ export const reducer: Reducer<EmployeesState> = (state: EmployeesState | undefin
     switch (action.type) {
         case 'REQUEST_EMPLOYEE':
             return {
-                startDateIndex: action.startDateIndex,
-                employess: state.employess,
+                ...state,
                 isLoading: true
             };
         case 'RECEIVE_EMPLOYEE':
-            if (action.startDateIndex === state.startDateIndex) {
-                return {
-                    startDateIndex: action.startDateIndex,
-                    employess: action.employees,
-                    isLoading: false
-                };
+            return {
+                maxPage: (action.employees.length / 5) - 1,
+                pageNumb: 0,
+                pageSize: 5,
+                employees: action.employees,
+                sortDirection: "none",
+                isLoading: false
             };
         case 'ASC_SORT':
-            const sortedEmp = action.employees.sort(byField(action.sortedValue));
             return {
-                isSorted: true,
-                isToggleOn: true,
-                startDateIndex: action.startDateIndex,
-                sortedValue: action.sortedValue,
-                employess: sortedEmp
+                ...state,
+                sortDirection: "asc",
+                sortColumn: action.sortedValue
             };
         case 'DESC_SORT':
             return {
-                isSorted: true,
-                isToggleOn: false,
-                sortedValue: action.sortedValue
+                ...state,
+                sortDirection: "desc",
+                sortColumn: action.sortedValue
+            };
+        case 'NEXT_PAGE':
+            return {
+                ...state,
+                pageNumb: (state.pageNumb != state.maxPage) ? state.pageNumb + 1 : state.pageNumb
+            };
+        case 'PREV_PAGE':
+            return {
+                ...state,
+                sortDirection: "desc",
+                pageNumb: (state.pageNumb != 0) ? state.pageNumb - 1 : state.pageNumb
             };
         default:
             return state;

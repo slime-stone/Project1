@@ -33,16 +33,12 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\components\LoadEmployees.tsx" />
-    <None Remove="ClientApp\src\components\Sort.tsx" />
     <None Remove="ClientApp\src\store\Employee.ts" />
-    <None Remove="ClientApp\src\store\Sort.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\LoadEmployees.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\Sort.tsx" />
     <TypeScriptCompile Include="ClientApp\src\store\Employee.ts" />
-    <TypeScriptCompile Include="ClientApp\src\store\Sort.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

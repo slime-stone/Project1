@@ -1,10 +1,8 @@
 import * as Employee from './Employee';
-import * as Sort from './Sort';
 
 // The top-level state object
 export interface ApplicationState {
     employees: Employee.EmployeesState | undefined;
-    sort: Sort.SortState | undefined;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using

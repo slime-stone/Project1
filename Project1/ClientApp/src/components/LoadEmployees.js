@@ -15,11 +15,24 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LoadEmploye = void 0;
 var React = require("react");
+var react_1 = require("react");
 var react_redux_1 = require("react-redux");
-var react_router_dom_1 = require("react-router-dom");
 var EmployeeStore = require("../store/Employee");
-var Sort_1 = require("./Sort");
+function LoadEmploye(props) {
+    var _a = react_1.useState(props.employees), emp = _a[0], setEmp = _a[1];
+    return (React.createElement(React.Fragment, null, props.employees.map(function (employee) {
+        return React.createElement("tr", { key: employee.id },
+            React.createElement("td", null, employee.name),
+            React.createElement("td", null, employee.surname),
+            React.createElement("td", null, employee.birthDay),
+            React.createElement("td", null, employee.age),
+            React.createElement("td", null, employee.englishValue),
+            React.createElement("td", null, "x"));
+    })));
+}
+exports.LoadEmploye = LoadEmploye;
 var LoadEmployee = /** @class */ (function (_super) {
     __extends(LoadEmployee, _super);
     function LoadEmployee() {
@@ -31,7 +44,7 @@ var LoadEmployee = /** @class */ (function (_super) {
     };
     // This method is called when the route parameters change
     LoadEmployee.prototype.componentDidUpdate = function () {
-        this.ensureDataFetched();
+        //this.ensureDataFetched(0);
     };
     LoadEmployee.prototype.render = function () {
         return (React.createElement(React.Fragment, null,
@@ -40,22 +53,19 @@ var LoadEmployee = /** @class */ (function (_super) {
             this.renderPagination()));
     };
     LoadEmployee.prototype.ensureDataFetched = function () {
-        var startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
-        this.props.requestEmployees(startDateIndex);
+        this.props.requestEmployees();
     };
     LoadEmployee.prototype.renderEmployeesTable = function () {
         return (React.createElement("table", { className: 'table table-striped', "aria-labelledby": "tabelLabel" },
             React.createElement("thead", null,
                 React.createElement("tr", null,
-                    React.createElement("th", null,
-                        "Name",
-                        React.createElement(Sort_1.default, null)),
+                    React.createElement("th", null, "Name"),
                     React.createElement("th", null, "Surname"),
                     React.createElement("th", null, "Birthday"),
                     React.createElement("th", null, "Age"),
                     React.createElement("th", null, "English test result"),
                     React.createElement("th", null))),
-            React.createElement("tbody", null, this.props.employess.map(function (employee) {
+            React.createElement("tbody", null, this.props.employees.map(function (employee) {
                 return React.createElement("tr", { key: employee.id },
                     React.createElement("td", null, employee.name),
                     React.createElement("td", null, employee.surname),
@@ -66,14 +76,12 @@ var LoadEmployee = /** @class */ (function (_super) {
             }))));
     };
     LoadEmployee.prototype.renderPagination = function () {
-        var prevStartDateIndex = (this.props.startDateIndex || 0) - 5;
-        var nextStartDateIndex = (this.props.startDateIndex || 0) + 5;
         return (React.createElement("div", { className: "d-flex justify-content-between" },
-            React.createElement(react_router_dom_1.Link, { className: 'btn btn-outline-secondary btn-sm', to: "/load-employees/" + prevStartDateIndex }, "Previous"),
+            this.props.pageNumb != 0 ? React.createElement("button", { className: 'btn btn-outline-secondary btn-sm', onClick: this.props.prevPage }, "Previous") : "",
             this.props.isLoading && React.createElement("span", null, "Loading..."),
-            React.createElement(react_router_dom_1.Link, { className: 'btn btn-outline-secondary btn-sm', to: "/load-employees/" + nextStartDateIndex }, "Next")));
+            this.props.pageNumb != this.props.maxPage ? React.createElement("button", { className: 'btn btn-outline-secondary btn-sm', onClick: this.props.nextPage }, "Next") : ""));
     };
     return LoadEmployee;
 }(React.PureComponent));
-exports.default = react_redux_1.connect(function (state) { return state.employees; }, EmployeeStore.actionCreators)(LoadEmployee);
+exports.default = react_redux_1.connect(function (state) { return state.employees; }, EmployeeStore.actionCreators)(LoadEmploye);
 //# sourceMappingURL=LoadEmployees.js.map

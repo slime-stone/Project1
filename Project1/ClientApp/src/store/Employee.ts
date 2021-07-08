@@ -4,6 +4,7 @@ import { AppThunkAction } from './';
 
 export interface EmployeesState {
     isLoading: boolean;
+    isLoaded: boolean;
     employees: Employee[];
     pageNumb: number;
     pageSize: number;
@@ -92,7 +93,7 @@ export const actionCreators = {
     }
 };
 
-const unloadedState: EmployeesState = { employees: [], isLoading: false, pageNumb: 0, pageSize: 5, maxPage: 0, sortDirection: "none" };
+const unloadedState: EmployeesState = { employees: [], isLoading: false, isLoaded: false, pageNumb: 0, pageSize: 5, maxPage: 0, sortDirection: "none" };
 
 export const reducer: Reducer<EmployeesState> = (state: EmployeesState | undefined, incomingAction: Action): EmployeesState => {
     if (state === undefined) {
@@ -104,16 +105,18 @@ export const reducer: Reducer<EmployeesState> = (state: EmployeesState | undefin
         case 'REQUEST_EMPLOYEE':
             return {
                 ...state,
-                isLoading: true
+                isLoading: false,
+                isLoaded: true
             };
         case 'RECEIVE_EMPLOYEE':
             return {
-                maxPage: (action.employees.length / 5) - 1,
+                maxPage: Math.ceil(action.employees.length / 5) - 1,
                 pageNumb: 0,
                 pageSize: 5,
                 employees: action.employees,
                 sortDirection: "none",
-                isLoading: false
+                isLoading: true,
+                isLoaded: false
             };
         case 'ASC_SORT':
             return {

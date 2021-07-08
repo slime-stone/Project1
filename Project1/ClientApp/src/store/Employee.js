@@ -49,7 +49,7 @@ exports.actionCreators = {
         }
     }; }
 };
-var unloadedState = { employees: [], isLoading: false, pageNumb: 0, pageSize: 5, maxPage: 0, sortDirection: "none" };
+var unloadedState = { employees: [], isLoading: false, isLoaded: false, pageNumb: 0, pageSize: 5, maxPage: 0, sortDirection: "none" };
 var reducer = function (state, incomingAction) {
     if (state === undefined) {
         return unloadedState;
@@ -57,15 +57,16 @@ var reducer = function (state, incomingAction) {
     var action = incomingAction;
     switch (action.type) {
         case 'REQUEST_EMPLOYEE':
-            return __assign(__assign({}, state), { isLoading: true });
+            return __assign(__assign({}, state), { isLoading: false, isLoaded: true });
         case 'RECEIVE_EMPLOYEE':
             return {
-                maxPage: (action.employees.length / 5) - 1,
+                maxPage: Math.ceil(action.employees.length / 5) - 1,
                 pageNumb: 0,
                 pageSize: 5,
                 employees: action.employees,
                 sortDirection: "none",
-                isLoading: false
+                isLoading: true,
+                isLoaded: false
             };
         case 'ASC_SORT':
             return __assign(__assign({}, state), { sortDirection: "asc", sortColumn: action.sortedValue });

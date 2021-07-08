@@ -23,33 +23,9 @@ exports.actionCreators = {
             });
             dispatch({ type: 'REQUEST_EMPLOYEE' });
         }
-    }; },
-    ascSort: function (sortedValue) { return function (dispatch, getState) {
-        var appState = getState();
-        if (appState && appState.employees && sortedValue in appState.employees.employees) {
-            dispatch({ type: "ASC_SORT", sortedValue: sortedValue });
-        }
-    }; },
-    descSort: function (sortedValue) { return function (dispatch, getState) {
-        var appState = getState();
-        if (appState && appState.employees && sortedValue in appState.employees.employees) {
-            dispatch({ type: "DESC_SORT", sortedValue: sortedValue });
-        }
-    }; },
-    nextPage: function () { return function (dispatch, getState) {
-        var appState = getState();
-        if (appState && appState.employees) {
-            dispatch({ type: "NEXT_PAGE" });
-        }
-    }; },
-    prevPage: function () { return function (dispatch, getState) {
-        var appState = getState();
-        if (appState && appState.employees) {
-            dispatch({ type: "PREV_PAGE" });
-        }
     }; }
 };
-var unloadedState = { employees: [], isLoading: false, isLoaded: false, pageNumb: 0, pageSize: 5, maxPage: 0, sortDirection: "none" };
+var unloadedState = { employees: [], isLoading: false, isLoaded: false };
 var reducer = function (state, incomingAction) {
     if (state === undefined) {
         return unloadedState;
@@ -60,22 +36,10 @@ var reducer = function (state, incomingAction) {
             return __assign(__assign({}, state), { isLoading: false, isLoaded: true });
         case 'RECEIVE_EMPLOYEE':
             return {
-                maxPage: Math.ceil(action.employees.length / 5) - 1,
-                pageNumb: 0,
-                pageSize: 5,
                 employees: action.employees,
-                sortDirection: "none",
                 isLoading: true,
                 isLoaded: false
             };
-        case 'ASC_SORT':
-            return __assign(__assign({}, state), { sortDirection: "asc", sortColumn: action.sortedValue });
-        case 'DESC_SORT':
-            return __assign(__assign({}, state), { sortDirection: "desc", sortColumn: action.sortedValue });
-        case 'NEXT_PAGE':
-            return __assign(__assign({}, state), { pageNumb: (state.pageNumb != state.maxPage) ? state.pageNumb + 1 : state.pageNumb });
-        case 'PREV_PAGE':
-            return __assign(__assign({}, state), { sortDirection: "desc", pageNumb: (state.pageNumb != 0) ? state.pageNumb - 1 : state.pageNumb });
         default:
             return state;
     }

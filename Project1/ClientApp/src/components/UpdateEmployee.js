@@ -117,4 +117,4 @@ var LoadEmployees = function (props) {
 };
 exports.LoadEmployees = LoadEmployees;
 exports.default = react_redux_1.connect(function (state) { return state.employees; }, EmployeeStore.actionCreators)(exports.LoadEmployees);
-//# sourceMappingURL=LoadEmployees.js.map
+//# sourceMappingURL=UpdateEmployee.js.map

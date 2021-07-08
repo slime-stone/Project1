@@ -33,11 +33,13 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\components\LoadEmployees.tsx" />
+    <None Remove="ClientApp\src\components\UpdateEmployee.tsx" />
     <None Remove="ClientApp\src\store\Employee.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\LoadEmployees.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\UpdateEmployee.tsx" />
     <TypeScriptCompile Include="ClientApp\src\store\Employee.ts" />
   </ItemGroup>
 

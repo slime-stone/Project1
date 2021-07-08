@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { useState, useEffect , useMemo} from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ type EmployeeProps =
     & typeof EmployeeStore.actionCreators // ... plus action creators we've requested
     & RouteComponentProps<{ startDateIndex: string }>; // ... plus incoming routing parameters
 
-function byFieldASC(field:string) {
+function byFieldASC(field: string) {
     return (a: any, b: any) => a[field] < b[field] ? 1 : -1;
 }
 function byFieldDESC(field: string) {
@@ -132,9 +132,9 @@ export const LoadEmployees = (props: EmployeeProps) => {
                 </tbody>
             </table>
             <div className="d-flex justify-content-between">
-                {page!= 0 ? <button className='btn btn-outline-secondary btn-sm' onClick={() => setPage(page - 1)}>Previous</button> : <span />}
+                {page != 0 ? <button className='btn btn-outline-secondary btn-sm' onClick={() => setPage(page - 1)}>Previous</button> : <span />}
                 {props.isLoaded && <span>Loading...</span>}
-                {!props.isLoaded && <span>Current page: {page + 1} - Last page: {maxPage+1}</span>}
+                {!props.isLoaded && <span>Current page: {page + 1} - Last page: {maxPage + 1}</span>}
                 {page != maxPage ? <button className='btn btn-outline-secondary btn-sm' onClick={() => setPage(page + 1)}>Next</button> : <span />}
             </div>
         </React.Fragment>
@@ -144,6 +144,6 @@ export const LoadEmployees = (props: EmployeeProps) => {
 
 
 export default connect(
-    (state: ApplicationState) => state.employees, 
-    EmployeeStore.actionCreators 
+    (state: ApplicationState) => state.employees,
+    EmployeeStore.actionCreators
 )(LoadEmployees as any);

@@ -19,7 +19,7 @@ export function LoadEmploye(props: EmployeeProps) {
 
     return (
         <React.Fragment>
-            
+            props.requestEmployees();
             {props.employees.map((employee: EmployeeStore.Employee) =>
                 <tr key={employee.id}>
                     <td>{employee.name}</td>

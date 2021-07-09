@@ -18,7 +18,7 @@ export const UpdateEmployee = (props: EmployeeStore.Employee) => {
 
     const [surname, setSurname] = useState(props.surname);
 
-    const [bithday, setBirthday] = useState(props.birthDay);
+    const [birthday, setBirthday] = useState(props.birthDay);
 
     const [age, setAge] = useState(props.age);
 
@@ -26,14 +26,14 @@ export const UpdateEmployee = (props: EmployeeStore.Employee) => {
 
     return (
         <React.Fragment>
-            <form name='updateEmp' method='post' action='employee'>
+            <form name='updateEmp' onSubmit={()=>sendData(props.id, name, surname, birthday, age, englishValue)}>
                 <input name='Id' value={props.id} hidden/>
                 <label>Name</label>
                 <input name='Name' type='text' value={name} onChange={(e) => setName(e.target.value)} />
                 <label>Surname</label>
                 <input name='Surname' type='text' value={surname} onChange={(e) => setSurname(e.target.value)} />
                 <label>Birthday</label>
-                <input name='Birthday' type='date' value={bithday} onChange={(e) => setBirthday(e.target.value)} />
+                <input name='Birthday' type='date' value={birthday} onChange={(e) => setBirthday(e.target.value)} />
                 <label>Age</label>
                 <input name='Age' type='number' value={age} onChange={(e) => setAge(Number(e.target.value))} />
                 <label>Result test from english</label>
@@ -45,6 +45,17 @@ export const UpdateEmployee = (props: EmployeeStore.Employee) => {
     );
 
 }
+
+const sendData = (id: number, name: string, surname: string, birthday: string, age: number, englishValue: number) => {
+    const Employee: EmployeeStore.Employee = { id: id, name: name, surname: surname, birthDay: birthday, age: age, englishValue: englishValue };
+    let body = "emp=" + Employee;
+    let request = new XMLHttpRequest();
+    request.open("POST", "employee");
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.send(body);
+}
+
+
 
 
 export default connect(

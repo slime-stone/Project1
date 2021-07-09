@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as EmployeeStore from '../store/Employee';
+import { NavLink } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 // At runtime, Redux will merge together...
 type EmployeeProps =
@@ -124,7 +126,7 @@ export const LoadEmployees = (props: EmployeeProps) => {
                             <td>{employee.birthDay}</td>
                             <td>{employee.age}</td>
                             <td>{employee.englishValue}</td>
-                            <td><button >Update</button></td>
+                            <td><NavLink tag={Link} className="text-dark" to="/load-employees">Update</NavLink></td>
                         </tr>
                     )}
 

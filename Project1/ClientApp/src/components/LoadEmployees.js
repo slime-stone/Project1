@@ -5,6 +5,8 @@ var React = require("react");
 var react_1 = require("react");
 var react_redux_1 = require("react-redux");
 var EmployeeStore = require("../store/Employee");
+var reactstrap_1 = require("reactstrap");
+var react_router_dom_1 = require("react-router-dom");
 function byFieldASC(field) {
     return function (a, b) { return a[field] < b[field] ? 1 : -1; };
 }
@@ -104,7 +106,7 @@ var LoadEmployees = function (props) {
                     React.createElement("td", null, employee.age),
                     React.createElement("td", null, employee.englishValue),
                     React.createElement("td", null,
-                        React.createElement("button", null, "Update")));
+                        React.createElement(reactstrap_1.NavLink, { tag: react_router_dom_1.Link, className: "text-dark", to: "/load-employees" }, "Update")));
             }))),
         React.createElement("div", { className: "d-flex justify-content-between" },
             page != 0 ? React.createElement("button", { className: 'btn btn-outline-secondary btn-sm', onClick: function () { return setPage(page - 1); } }, "Previous") : React.createElement("span", null),

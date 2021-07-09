@@ -13,13 +13,14 @@ function byFieldASC(field) {
 function byFieldDESC(field) {
     return function (a, b) { return a[field] > b[field] ? 1 : -1; };
 }
-var LoadEmployees = function (props) {
+var LoadEmployees = function () {
+    var emps = react_redux_1.useSelector(function (state) { return state; });
     react_1.useEffect(function () {
-        if (!props.isLoaded && !props.isLoading) {
-            props.requestEmployees();
+        if (!emps.isLoaded && !emps.isLoading) {
+            emps.requestEmployees();
         }
     }, []);
-    var _a = react_1.useState(props.employees), empPack = _a[0], setEmpPack = _a[1];
+    var _a = react_1.useState(emps.employees), empPack = _a[0], setEmpPack = _a[1];
     ///sort
     var _b = react_1.useState('none'), nameSort = _b[0], setNameSort = _b[1];
     react_1.useEffect(function () {
@@ -70,12 +71,12 @@ var LoadEmployees = function (props) {
     var _g = react_1.useState(0), page = _g[0], setPage = _g[1];
     var _h = react_1.useState(0), maxPage = _h[0], setMaxPage = _h[1];
     react_1.useEffect(function () {
-        setMaxPage(Math.ceil(props.employees.length / 5) - 1);
-    }, [props.employees]);
+        setMaxPage(Math.ceil(emps.employees.length / 5) - 1);
+    }, [emps.employees]);
     ///empPack
     react_1.useEffect(function () {
-        setEmpPack(props.employees.slice(page * 5, (page * 5) + 5));
-    }, [page, props.employees]);
+        setEmpPack(emps.employees.slice(page * 5, (page * 5) + 5));
+    }, [page, emps.employees]);
     ///
     return (React.createElement(React.Fragment, null,
         React.createElement("h1", { id: "tabelLabel" }, "Employees"),
@@ -106,12 +107,12 @@ var LoadEmployees = function (props) {
                     React.createElement("td", null, employee.age),
                     React.createElement("td", null, employee.englishValue),
                     React.createElement("td", null,
-                        React.createElement(reactstrap_1.NavLink, { tag: react_router_dom_1.Link, className: "text-dark", to: "/update-employee/" + employee.id + "/" + employee.name + "/" + employee.surname + "/" + employee.birthDay + "/" + employee.age + "/" + employee.englishValue }, "Edit")));
+                        React.createElement(reactstrap_1.NavLink, { tag: react_router_dom_1.Link, className: "text-dark", to: "/update-employee/" + employee.id }, "Edit")));
             }))),
         React.createElement("div", { className: "d-flex justify-content-between" },
             page != 0 ? React.createElement("button", { className: 'btn btn-outline-secondary btn-sm', onClick: function () { return setPage(page - 1); } }, "Previous") : React.createElement("span", null),
-            props.isLoaded && React.createElement("span", null, "Loading..."),
-            !props.isLoaded && React.createElement("span", null,
+            emps.isLoaded && React.createElement("span", null, "Loading..."),
+            !emps.isLoaded && React.createElement("span", null,
                 "Current page: ",
                 page + 1,
                 " - Last page: ",

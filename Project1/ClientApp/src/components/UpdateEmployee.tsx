@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { useState, useEffect} from 'react';
-import { connect } from 'react-redux';
+import { connect , useSelector} from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as EmployeeStore from '../store/Employee';
@@ -11,17 +11,23 @@ type EmployeeProps =
     & typeof EmployeeStore.actionCreators // ... plus action creators we've requested
     & RouteComponentProps<{ startDateIndex: string }>; // ... plus incoming routing parameters
 
-export const UpdateEmployee = (props: any) => {
 
-    const [name, setName] = useState(props.match.params.name);
+export const UpdateEmployee = (id: number) => {
 
-    const [surname, setSurname] = useState(props.match.params.surname);
+    const ttt = useSelector((state: EmployeeStore.EmployeesState) => state.employees.filter(t => t.id === id));
 
-    const [birthday, setBirthday] = useState(props.match.params.birthDay);
+    const [emp, setEmp] = useState(ttt[0]);
 
-    const [age, setAge] = useState(props.match.params.age);
+    const [name, setName] = useState(emp.name);
 
-    const [englishValue, setEnglishValue] = useState(props.match.params.englishvalue);
+    const [surname, setSurname] = useState(emp.surname);
+
+    const [birthday, setBirthday] = useState(emp.birthDay);
+
+    const [age, setAge] = useState(emp.age);
+
+    const [englishValue, setEnglishValue] = useState(emp.englishValue);
+
 
     return (
         <React.Fragment>
@@ -57,7 +63,7 @@ export const UpdateEmployee = (props: any) => {
                     <input name='EnglishValue' type='number' value={englishValue} onChange={(e) => setEnglishValue(Number(e.target.value))} />
                 </p>
                 <p>
-                    <input type='button' value='Update' onClick={() => sendData(props.match.params.id, name, surname, birthday, age, englishValue)}/>
+                    <input type='button' value='Update' onClick={() => { setEmp({ id: id, name: name, surname: surname, birthDay: birthday, age: age, englishValue: englishValue }); sendData(emp) }} />
                 </p>
             </form>
         </React.Fragment>
@@ -65,17 +71,15 @@ export const UpdateEmployee = (props: any) => {
 
 }
 
-const sendData = (id: number, name: string, surname: string, birthday: string, age: number, englishValue: number) => {
-    let body = "?Id=" + id + "&Name=" + name + "&Surname=" + surname + "&BirthDay=" + birthday + "&Age=" + age + "&EnglishValue=" + englishValue;
-    let request = new XMLHttpRequest();
-    console.log(body);
-    request.open("Post", "employee/" + body);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send(body);
+const sendData = (emp: EmployeeStore.Employee) => {
+    let response = fetch('/article/fetch/post/user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(emp)
+    });
 }
-
-
-
 
 export default connect(
     (state: ApplicationState) => state.employees,

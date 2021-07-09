@@ -11,6 +11,6 @@ export default () => (
     <Layout>
         <Route exact path='/' component={Home} />
         <Route path='/load-employees/' component={LoadEmployees} />
-        <Route path='/update-employee/:id/:name/:surname/:birthday/:age/:englishvalue' component={UpdateEmployee} />
+        <Route path='/update-employee/:id' component={UpdateEmployee} />
     </Layout>
 );

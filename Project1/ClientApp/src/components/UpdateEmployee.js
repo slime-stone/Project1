@@ -5,12 +5,14 @@ var React = require("react");
 var react_1 = require("react");
 var react_redux_1 = require("react-redux");
 var EmployeeStore = require("../store/Employee");
-var UpdateEmployee = function (props) {
-    var _a = react_1.useState(props.match.params.name), name = _a[0], setName = _a[1];
-    var _b = react_1.useState(props.match.params.surname), surname = _b[0], setSurname = _b[1];
-    var _c = react_1.useState(props.match.params.birthDay), birthday = _c[0], setBirthday = _c[1];
-    var _d = react_1.useState(props.match.params.age), age = _d[0], setAge = _d[1];
-    var _e = react_1.useState(props.match.params.englishvalue), englishValue = _e[0], setEnglishValue = _e[1];
+var UpdateEmployee = function (id) {
+    var ttt = react_redux_1.useSelector(function (state) { return state.employees.filter(function (t) { return t.id === id; }); });
+    var _a = react_1.useState(ttt[0]), emp = _a[0], setEmp = _a[1];
+    var _b = react_1.useState(emp.name), name = _b[0], setName = _b[1];
+    var _c = react_1.useState(emp.surname), surname = _c[0], setSurname = _c[1];
+    var _d = react_1.useState(emp.birthDay), birthday = _d[0], setBirthday = _d[1];
+    var _e = react_1.useState(emp.age), age = _e[0], setAge = _e[1];
+    var _f = react_1.useState(emp.englishValue), englishValue = _f[0], setEnglishValue = _f[1];
     return (React.createElement(React.Fragment, null,
         React.createElement("form", { name: 'updateEmp' },
             React.createElement("p", null,
@@ -34,16 +36,17 @@ var UpdateEmployee = function (props) {
             React.createElement("p", null,
                 React.createElement("input", { name: 'EnglishValue', type: 'number', value: englishValue, onChange: function (e) { return setEnglishValue(Number(e.target.value)); } })),
             React.createElement("p", null,
-                React.createElement("input", { type: 'button', value: 'Update', onClick: function () { return sendData(props.match.params.id, name, surname, birthday, age, englishValue); } })))));
+                React.createElement("input", { type: 'button', value: 'Update', onClick: function () { setEmp({ id: id, name: name, surname: surname, birthDay: birthday, age: age, englishValue: englishValue }); sendData(emp); } })))));
 };
 exports.UpdateEmployee = UpdateEmployee;
-var sendData = function (id, name, surname, birthday, age, englishValue) {
-    var body = "?Id=" + id + "&Name=" + name + "&Surname=" + surname + "&BirthDay=" + birthday + "&Age=" + age + "&EnglishValue=" + englishValue;
-    var request = new XMLHttpRequest();
-    console.log(body);
-    request.open("Post", "employee/" + body);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send(body);
+var sendData = function (emp) {
+    var response = fetch('/article/fetch/post/user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(emp)
+    });
 };
 exports.default = react_redux_1.connect(function (state) { return state.employees; }, EmployeeStore.actionCreators)(exports.UpdateEmployee);
 //# sourceMappingURL=UpdateEmployee.js.map

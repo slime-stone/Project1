@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { useState, useEffect , useMemo} from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import * as EmployeeStore from '../store/Employee';
@@ -20,17 +20,18 @@ function byFieldDESC(field: string) {
     return (a: any, b: any) => a[field] > b[field] ? 1 : -1;
 }
 
-export const LoadEmployees = (props: EmployeeProps) => {
+export const LoadEmployees = () => {
 
+    const emps = useSelector((state: EmployeeProps) => state);
 
     useEffect(() => {
-        if (!props.isLoaded && !props.isLoading) {
-            props.requestEmployees();
+        if (!emps.isLoaded && !emps.isLoading) {
+            emps.requestEmployees();
         }
     }, []);
 
 
-    const [empPack, setEmpPack] = useState(props.employees);
+    const [empPack, setEmpPack] = useState(emps.employees);
 
     ///sort
 
@@ -91,14 +92,14 @@ export const LoadEmployees = (props: EmployeeProps) => {
     const [maxPage, setMaxPage] = useState(0);
 
     useEffect(() => {
-        setMaxPage(Math.ceil(props.employees.length / 5) - 1);
-    }, [props.employees]);
+        setMaxPage(Math.ceil(emps.employees.length / 5) - 1);
+    }, [emps.employees]);
 
     ///empPack
 
     useEffect(() => {
-        setEmpPack(props.employees.slice(page * 5, (page * 5) + 5))
-    }, [page, props.employees]);
+        setEmpPack(emps.employees.slice(page * 5, (page * 5) + 5))
+    }, [page, emps.employees]);
 
 
 
@@ -126,7 +127,7 @@ export const LoadEmployees = (props: EmployeeProps) => {
                             <td>{employee.birthDay}</td>
                             <td>{employee.age}</td>
                             <td>{employee.englishValue}</td>
-                            <td><NavLink tag={Link} className="text-dark" to={`/update-employee/${employee.id}/${employee.name}/${employee.surname}/${employee.birthDay}/${employee.age}/${employee.englishValue}`}>Edit</NavLink></td>
+                            <td><NavLink tag={Link} className="text-dark" to={`/update-employee/${employee.id}`}>Edit</NavLink></td>
                         </tr>
                     )}
 
@@ -134,8 +135,8 @@ export const LoadEmployees = (props: EmployeeProps) => {
             </table>
             <div className="d-flex justify-content-between">
                 {page!= 0 ? <button className='btn btn-outline-secondary btn-sm' onClick={() => setPage(page - 1)}>Previous</button> : <span />}
-                {props.isLoaded && <span>Loading...</span>}
-                {!props.isLoaded && <span>Current page: {page + 1} - Last page: {maxPage+1}</span>}
+                {emps.isLoaded && <span>Loading...</span>}
+                {!emps.isLoaded && <span>Current page: {page + 1} - Last page: {maxPage+1}</span>}
                 {page != maxPage ? <button className='btn btn-outline-secondary btn-sm' onClick={() => setPage(page + 1)}>Next</button> : <span />}
             </div>
         </React.Fragment>

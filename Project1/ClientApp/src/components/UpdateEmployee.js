@@ -6,7 +6,7 @@ var react_1 = require("react");
 var react_redux_1 = require("react-redux");
 var EmployeeStore = require("../store/Employee");
 var UpdateEmployee = function (id) {
-    var ttt = react_redux_1.useSelector(function (state) { return state.employees.filter(function (t) { return t.id === id; }); });
+    var ttt = react_redux_1.useSelector(function (state) { return state.employees.employees.filter(function (t) { return t.id === id; }); });
     var _a = react_1.useState(ttt[0]), emp = _a[0], setEmp = _a[1];
     var _b = react_1.useState(emp.name), name = _b[0], setName = _b[1];
     var _c = react_1.useState(emp.surname), surname = _c[0], setSurname = _c[1];

@@ -13,8 +13,7 @@ function byFieldASC(field) {
 function byFieldDESC(field) {
     return function (a, b) { return a[field] > b[field] ? 1 : -1; };
 }
-var LoadEmployees = function () {
-    var emps = react_redux_1.useSelector(function (state) { return state; });
+var LoadEmployees = function (emps) {
     react_1.useEffect(function () {
         if (!emps.isLoaded && !emps.isLoading) {
             emps.requestEmployees();

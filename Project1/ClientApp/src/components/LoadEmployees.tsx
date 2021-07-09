@@ -20,9 +20,8 @@ function byFieldDESC(field: string) {
     return (a: any, b: any) => a[field] > b[field] ? 1 : -1;
 }
 
-export const LoadEmployees = () => {
+export const LoadEmployees = (emps: EmployeeProps) => {
 
-    const emps = useSelector((state: EmployeeProps) => state);
 
     useEffect(() => {
         if (!emps.isLoaded && !emps.isLoading) {

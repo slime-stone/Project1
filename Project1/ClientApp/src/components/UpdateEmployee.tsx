@@ -14,7 +14,7 @@ type EmployeeProps =
 
 export const UpdateEmployee = (id: number) => {
 
-    const ttt = useSelector((state: EmployeeStore.EmployeesState) => state.employees.filter(t => t.id === id));
+    const ttt = useSelector((state: ApplicationState) => state.employees.employees.filter(t => t.id === id));
 
     const [emp, setEmp] = useState(ttt[0]);
 

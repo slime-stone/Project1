@@ -2,7 +2,7 @@ import * as Employee from './Employee';
 
 // The top-level state object
 export interface ApplicationState {
-    employees: Employee.EmployeesState | undefined;
+    employees: Employee.EmployeesState;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using

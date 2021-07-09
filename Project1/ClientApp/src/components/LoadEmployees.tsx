@@ -2,7 +2,6 @@
 import { useState, useEffect , useMemo} from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom';
 import { ApplicationState } from '../store';
 import * as EmployeeStore from '../store/Employee';
 
@@ -125,7 +124,7 @@ export const LoadEmployees = (props: EmployeeProps) => {
                             <td>{employee.birthDay}</td>
                             <td>{employee.age}</td>
                             <td>{employee.englishValue}</td>
-                            <td>x</td>
+                            <td><button >Update</button></td>
                         </tr>
                     )}
 

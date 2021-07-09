@@ -26,9 +26,14 @@ interface ReceiveEmployeeAction {
     employees: Employee[];
 }
 
+interface UpdateEmployeeAction {
+    type: 'UPDATE_EMPLOYEE',
+    employee: Employee
+}
 
 
-type KnownAction = RequestEmployeeAction | ReceiveEmployeeAction;
+
+type KnownAction = RequestEmployeeAction | ReceiveEmployeeAction | UpdateEmployeeAction;
 
 
 
@@ -42,6 +47,12 @@ export const actionCreators = {
                     dispatch({ type: 'RECEIVE_EMPLOYEE', employees: data });
                 });
             dispatch({ type: 'REQUEST_EMPLOYEE'});
+        }
+    },
+    updateEmployee: (emp: Employee): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const appState = getState();
+        if (appState && appState.employees && emp) {
+            dispatch({ type: 'UPDATE_EMPLOYEE', employee: emp });
         }
     }
 };

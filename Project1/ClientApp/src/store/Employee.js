@@ -23,6 +23,12 @@ exports.actionCreators = {
             });
             dispatch({ type: 'REQUEST_EMPLOYEE' });
         }
+    }; },
+    updateEmployee: function (emp) { return function (dispatch, getState) {
+        var appState = getState();
+        if (appState && appState.employees && emp) {
+            dispatch({ type: 'UPDATE_EMPLOYEE', employee: emp });
+        }
     }; }
 };
 var unloadedState = { employees: [], isLoading: false, isLoaded: false };

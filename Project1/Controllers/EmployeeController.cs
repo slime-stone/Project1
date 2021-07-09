@@ -28,16 +28,16 @@ namespace Project1.Controllers
         }
 
         [HttpPost]
-        public string Post(Employee updEmp)
+        public string Post(int Id, string Name, string Surname, string BirthDay, int Age, int EnglishValue)
         {
-            Employee findEmp = Array.Find(db.Employees.ToArray<Employee>(), (Employee t) => t.Id == updEmp.Id);
+            Employee findEmp = db.Employees.Find(Id);
             if(findEmp != null)
             {
-                findEmp.Name = updEmp.Name;
-                findEmp.Surname = updEmp.Surname;
-                findEmp.BirthDay = updEmp.BirthDay;
-                findEmp.Age = updEmp.Age;
-                findEmp.EnglishValue = updEmp.EnglishValue;
+                findEmp.Name = Name;
+                findEmp.Surname = Surname;
+                findEmp.BirthDay = Convert.ToDateTime(BirthDay);
+                findEmp.Age = Age;
+                findEmp.EnglishValue = EnglishValue;
                 db.SaveChanges();
                 return "Ok";
             }

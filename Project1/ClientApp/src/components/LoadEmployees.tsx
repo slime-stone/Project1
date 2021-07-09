@@ -126,7 +126,7 @@ export const LoadEmployees = (props: EmployeeProps) => {
                             <td>{employee.birthDay}</td>
                             <td>{employee.age}</td>
                             <td>{employee.englishValue}</td>
-                            <td><NavLink tag={Link} className="text-dark" to="/load-employees">Update</NavLink></td>
+                            <td><NavLink tag={Link} className="text-dark" to={`/update-employee/${employee.id}/${employee.name}/${employee.surname}/${employee.birthDay}/${employee.age}/${employee.englishValue}`}>Edit</NavLink></td>
                         </tr>
                     )}
 
